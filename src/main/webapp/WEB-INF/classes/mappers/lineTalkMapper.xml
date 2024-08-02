@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS3.dao.LineTalkDAO">
+	<select id="getLineTalkList" resultType="com.spring.javaclassS3.vo.LineTalkVO">
+		select l.*, m.nickName, m.photo from lineTalk l left join member2 m on l.mid = m.mid order by idx limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getTotRecCnt" resultType="int">
+		select count(*) from lineTalk;
+	</select>
+	
+	<insert id="lineTalkInput">
+		insert into lineTalk values (default, #{mid}, #{chat}, default);
+	</insert>
+	
+	<delete id="setLineTalkDelete">
+		delete from lineTalk where idx = #{idx};
+	</delete>
+</mapper>

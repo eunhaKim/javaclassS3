@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS3.dao.ShopDAO">
+	
+	<select id="getCategory1List" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category1 order by category1Code desc;
+	</select>	
+	
+	<select id="getCategory2List" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category2 order by category2Code desc;
+	</select>	
+	
+	<select id="getCategory3List" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category3 order by category3Code desc;
+	</select>	
+	
+	<select id="getCategory1One" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category1 where category1Code = #{vo.category1Code};
+	</select>
+	
+	<select id="getCategory2One" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category2 where category2Code = #{vo.category2Code};
+	</select>
+	
+	<select id="getCategory3One" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category3 where category3Code = #{vo.category3Code};
+	</select>
+	
+	<select id="getCategory1OneAfter" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category1 where category1Name = #{vo.category1Name};
+	</select>
+	
+	<select id="getCategory2OneAfter" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category2 where category1Code = #{vo.category1Code} and category2Name = #{vo.category2Name};
+	</select>
+	
+	<select id="getCategory2Name" resultType="com.spring.javaclassS3.vo.ProductVO">
+    select * from category2 where category1Code = #{category1Code};
+  </select>
+	
+	<insert id="setCategory1Input">
+		insert into category1 values (#{vo.category1Code}, #{vo.category1Name});
+	</insert>
+	
+	<insert id="setCategory2Input">
+    insert into category2 values (#{vo.category1Code}, #{vo.category2Code}, #{vo.category2Name});
+  </insert>
+	
+	<insert id="setCategory3Input">
+    insert into category3 values (#{vo.category1Code}, #{vo.category2Code}, #{vo.category3Code}, #{vo.category3Name});
+  </insert>
+	
+	<delete id="setCategory1Delete">
+		delete from category1 where category1Code = #{category1Code};
+	</delete>
+	
+	<delete id="setCategory2Delete">
+		delete from category2 where category2Code = #{category2Code};
+	</delete>
+	
+	<delete id="setCategory3Delete">
+		delete from category3 where category3Code = #{category3Code};
+	</delete>
+	
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS3.dao.AdminDAO">
+	<select id="getMemberTotRecCnt" resultType="int">
+	  <if test="level == 99">select count(*) from member2;</if>
+	  <if test="level == 999">select count(*) from member2 where userDel='OK';</if>
+	  <if test="level != 99 and level != 999">select count(*) from member2 where level = #{level};</if>
+	</select>
+	
+	<select id="getMemberList" resultType="com.spring.javaclassS3.vo.MemberVO">
+		<if test="level == 99">select *, timestampdiff(day, lastDate, now()) as deleteDiff from member2 order by mid limit #{startIndexNo},#{pageSize};</if>
+		<if test="level == 999">select *, timestampdiff(day, lastDate, now()) as deleteDiff from member2 where userDel='OK' order by mid limit #{startIndexNo},#{pageSize};</if>
+		<if test="level != 99 and level != 999">select *, timestampdiff(day, lastDate, now()) as deleteDiff from member2 where level = #{level} order by mid limit #{startIndexNo},#{pageSize};</if>
+	</select>
+	
+	<select id="getBoardNameCheck" resultType="int">
+		select count(*) from boardList where boardName = #{boardName};
+	</select>
+	
+	<select id="getTableNameCheck" resultType="int">
+		select count(*) from boardList where tableName = #{tableName};
+	</select>
+	
+	<select id="getBoardList" resultType="com.spring.javaclassS3.vo.BoardListVO">
+		select * from boardList order by idx desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getboardListTotRecCnt" resultType="int">
+		select count(*) from boardList;
+	</select>
+	
+	<update id="setMemberLevelCheck">
+		update member2 set level = #{level} where idx = #{idx};
+	</update>
+	
+	<delete id="setMemberDeleteOk">
+	  delete from member2 where idx = #{idx};
+	</delete>
+	
+	<delete id="setboardDelete">
+		delete from boardList where idx = #{idx};
+		drop table ${tableName};
+	</delete>
+	
+	
+	<insert id="setBoardCreate">
+		insert into boardList values (default, #{vo.boardName}, #{vo.tableName}, #{vo.boardType}, #{vo.category}, default);
+		create table ${vo.tableName} 
+		(
+			idx 			int not null auto_increment, 	/* 게시글의 고유번호 */
+			mid 			varchar(20) not null,					/* 게시글 올린이의 아이디 */
+			title 		varchar(100) not null, 				/* 게시글 제목 */
+			content 	text not null, 								/* 게시글 내용 */
+			fName		 	varchar(200),									/* 업로드시의 화일명 */
+		  fSName   	varchar(200), 								/* 실제 서버에 저장되는 파일명 */
+			readNum 	int default 0, 								/* 게시글 조회수 */
+			hostIp 		varchar(40) not null, 				/* 글쓴이 아이피 */
+			wDate 		datetime default now(), 			/* 글쓴시간 */
+			good 			int default 0, 								/* 좋아요 */
+			complaint char(2) default 'NO', 				/* 신고해당유무(신고당한글: OK) */
+			openSw	char(2)  default 'OK',			/* 게시글 공개여부(OK:공개, NO:비공개) */
+			primary key(idx),
+			foreign key(mid) references member2(mid)
+		);
+	</insert>
+	
+	
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS3.dao.BoardDAO">
+
+	<select id="getBoardList" resultType="com.spring.javaclassS3.vo.BoardVO">
+		select b.*, m.nickName as nickName, m.photo as photo, (select count(*) from boardReply2 where boardIdx = b.idx) as replyCnt from ${boardName} b left join member2 m on b.mid = m.mid order by b.idx desc limit #{pageSize};
+	</select>
+	
+	<select id="getBoardContent" resultType="com.spring.javaclassS3.vo.BoardVO">
+		select b.*, m.nickName as nickName, m.photo as photo, m.content as memberContent, m.homePage as homePage, (select count(*) from boardReply2 where boardIdx = b.idx) as replyCnt from ${boardName} b left join member2 m on b.mid = m.mid where b.idx = #{idx};
+	</select>
+	
+	<select id="getBoardParentReplyCheck" resultType="com.spring.javaclassS3.vo.BoardReplyVO">
+	  select * from boardReply2 where boardName = #{replyVO.boardName} and boardIdx = #{replyVO.boardIdx} order by idx desc limit 1;
+	</select>
+	
+	<select id="getBoardReply" resultType="com.spring.javaclassS3.vo.BoardReplyVO">
+	  select b.*, m.photo as photo from boardReply2 b join member2 m on b.mid = m.mid where b.boardName = #{boardName} and b.boardIdx = #{idx} order by b.re_order;
+	</select>
+	
+	<insert id="setBoardInput">
+	  insert into ${boardName} values (default,#{vo.mid},#{vo.title},#{vo.content},#{vo.fName},#{vo.fSName},default,#{vo.hostIp},default,default,default,default);
+	</insert>
+	
+	<insert id="setBoardReplyInput">
+	  insert into boardReply2 values (default,#{replyVO.boardName},#{replyVO.boardIdx},#{replyVO.re_step},#{replyVO.re_order},#{replyVO.mid},#{replyVO.nickName},default,#{replyVO.hostIp},#{replyVO.content});
+	</insert>
+	
+	<update id="setReadNumPlus">
+	  update ${boardName} set readNum = readNum + 1 where idx = #{idx};
+	</update>
+	
+	<update id="setBoardGoodCheck">
+		update ${boardName} set good = good + 1 where idx = #{idx};
+	</update>
+	
+	<delete id="setBoardDelete">
+	  delete from ${boardName} where idx = #{idx};
+	</delete>
+	
+	<delete id="setBoardReplyDelete">
+		delete from boardReply2 where idx = #{idx}; 	
+	</delete>
+	
+	<update id="setBoarddelListImg">
+		update ${boardName} set fName = #{vo.fName}, fSName = #{vo.fSName} where idx = #{vo.idx};
+	</update>
+	
+	<update id="setBoardUpdate">
+		update ${boardName} set title=#{vo.title}, content=#{vo.content}, fName=#{vo.fName}, fSName=#{vo.fSName}, hostIp=#{vo.hostIp}, wDate=now() where idx=#{vo.idx};
+	</update>
+	
+	<update id="setReplyOrderUpdate">
+	  update boardReply2 set re_order = re_order + 1 where boardIdx = #{boardIdx} and re_order > #{re_order};
+	</update>
+	
+	<update id="setBoardReplyUpdate">
+		update boardReply2 set content = #{replyVO.content}, hostIp = #{replyVO.hostIp} where idx = #{replyVO.idx};
+	</update>
+	
+</mapper>

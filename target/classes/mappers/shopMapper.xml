@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS3.dao.ShopDAO">
+	
+	<select id="getCategory1List" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category1 order by category1Code asc;
+	</select>	
+	
+	<select id="getCategory2List" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category2 order by category2Code asc;
+	</select>	
+	
+	<select id="getCategory3List" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category3 order by category3Code asc;
+	</select>	
+	
+	<select id="getCategory1One" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category1 where category1Code = #{vo.category1Code};
+	</select>
+	
+	<select id="getCategory2One" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category2 where category2Code = #{vo.category2Code};
+	</select>
+	
+	<select id="getCategory3One" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category3 where category3Code = #{vo.category3Code};
+	</select>
+	
+	<select id="getCategory1OneAfter" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category1 where category1Name = #{vo.category1Name};
+	</select>
+	
+	<select id="getCategory2OneAfter" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from category2 where category1Code = #{vo.category1Code} and category2Name = #{vo.category2Name};
+	</select>
+	
+	<select id="getCategory2Name" resultType="com.spring.javaclassS3.vo.ProductVO">
+    select * from category2 where category1Code = #{category1Code};
+  </select>
+	
+	<select id="getCategory3Name" resultType="com.spring.javaclassS3.vo.ProductVO">
+    select * from category3 where category1Code = #{category1Code} and category2Code = #{category2Code};
+  </select>
+  
+  <select id="getProductMaxIdx" resultType="com.spring.javaclassS3.vo.ProductVO">
+    select * from product order by idx desc limit 1;
+  </select>
+  
+  <select id="getProductMaxIdx2" resultType="int">
+    select idx from product order by idx desc limit 1;
+  </select>
+  
+  <select id="getCat3Title" resultType="com.spring.javaclassS3.vo.ProductVO">
+  	select category3Name from category3 group by category3Name order by category3Name;
+  </select>
+  
+  <select id="getShopList" resultType="com.spring.javaclassS3.vo.ProductVO">
+	  <if test='part == "전체"'>
+	    select * from product <if test='mainPrice != 0'>where <![CDATA[mainPrice < #{mainPrice}]]></if> order by idx desc;
+	 	</if>
+	  <if test='part != "전체"'>     <!-- A01003 -->
+	 		select product.*, cat3.category3Name from product product, category3 cat3 
+	 		  where cat3.category3Name = #{part} and substring(product.productCode,4,3)=cat3.category3Code <if test='mainPrice != 0'>and <![CDATA[mainPrice < #{mainPrice}]]></if> order by idx desc;
+	 	</if>
+	</select>
+	
+  <select id="getProductList" resultType="com.spring.javaclassS3.vo.ProductVO">
+	  <if test='cat1 == "전체"'>
+	    select p.*,cat1.category1Name as category1Name from product p left join category1 cat1 on p.category1Code = cat1.category1Code <if test='mainPrice != 0'> where <![CDATA[p.mainPrice < #{mainPrice}]]></if> order by idx desc;
+	 	</if>
+	  <if test='cat1 != "전체"'>     <!-- A01003 -->
+	 		select p.*,cat1.category1Name as category1Name from product p left join category1 cat1 on p.category1Code = cat1.category1Code where p.category1Code = #{cat1} <if test='mainPrice != 0'>and <![CDATA[p.mainPrice < #{mainPrice}]]></if> order by p.idx desc;
+	 	</if>
+	</select>
+	
+	<select id="getShopProduct" resultType="com.spring.javaclassS3.vo.ProductVO">
+		select * from product where idx = #{idx};
+	</select>
+	
+	<select id="getShopOption" resultType="com.spring.javaclassS3.vo.OptionVO">
+  	select * from productOption where productIdx = #{idx} order by idx;
+  </select>
+  
+  <select id="getCategory2First" resultType="com.spring.javaclassS3.vo.ProductVO">
+  	select * from category2 where category1Code = #{cat1} order by category2Code asc limit 1;
+  </select>
+  
+  <select id="getCategory3First" resultType="com.spring.javaclassS3.vo.ProductVO">
+  	select * from category3 where category2Code = #{cat2} order by category3Code asc limit 1;
+  </select>
+  
+  <select id="getProductListCat3" resultType="com.spring.javaclassS3.vo.ProductVO">
+  	select * from product where category3Code = #{cat3};
+  </select>
+  
+  <select id="getProductListCat2" resultType="com.spring.javaclassS3.vo.ProductVO">
+  	select * from product where category2Code = #{cat2};
+  </select>
+  
+  <select id="getDbCartProductOptionSearch" resultType="com.spring.javaclassS3.vo.DbCartVO">
+  	select * from dbCart where productName=#{productName} and optionName=#{optionName} and mid=#{mid};
+  </select>
+  
+  <select id="getDbCartList" resultType="com.spring.javaclassS3.vo.DbCartVO">
+  	select * from dbCart where mid=#{mid} order by idx;
+  </select>
+  
+  <select id="getOrderMaxIdx" resultType="com.spring.javaclassS3.vo.DbOrderVO">
+  	select max(idx) as maxIdx from dbOrder;
+  </select>
+  
+  <select id="getCartIdx" resultType="com.spring.javaclassS3.vo.DbCartVO">
+  	select * from dbCart where idx = #{idx};
+  </select>
+  
+  <select id="getTotalBaesongOrder" resultType="int">
+    select orderTotalPrice from dbBaesong where orderIdx = #{orderIdx};
+  </select>
+  
+  <select id="getOrderBaesong" resultType="com.spring.javaclassS3.vo.DbBaesongVO">
+    select * from dbBaesong where orderIdx = #{orderIdx};
+  </select>
+  
+  <select id="totRecCnt" resultType="int">
+    <if test='mid == "전체"'>
+      select count(*) from dbOrder where date(orderDate) = substring(now(),1,10);
+    </if>
+    <if test='mid != "전체"'>
+      select count(baesong.idx) from dbOrder oder join dbBaesong baesong using(orderIdx), member2 member where member.mid = #{mid} and date(orderDate) = substring(now(),1,10);
+    </if>
+  </select>
+  
+  <select id="getMyOrderList" resultType="com.spring.javaclassS3.vo.DbBaesongVO">
+    <if test='mid == "전체"'>
+      SELECT oder.*,baesong.* from dbOrder oder join dbBaesong baesong using(orderIdx) 
+      where date(orderDate) = substring(now(),1,10) order by baesong.idx desc limit #{startIndexNo},#{pageSize};
+    </if>
+    <if test='mid != "전체"'>
+      SELECT oder.*,baesong.* from dbOrder oder join dbBaesong baesong using(orderIdx) 
+      where baesong.mid=#{mid} and date(orderDate) = substring(now(),1,10) order by baesong.idx desc limit #{startIndexNo},#{pageSize};
+    </if>
+  </select>
+  
+  <select id="getMyOrderStatus" resultType="com.spring.javaclassS3.vo.DbBaesongVO">
+    <if test="mid == '전체' and conditionOrderStatus == '전체'">
+      select o.*,b.* from dbOrder o join dbBaesong b using(orderIdx) where <![CDATA[ date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]> limit #{startIndexNo},#{pageSize};
+    </if>
+    <if test="mid == '전체' and conditionOrderStatus != '전체'">
+      select o.*,b.* from dbOrder o join dbBaesong b using(orderIdx) where <![CDATA[ date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{conditionOrderStatus} order by orderDate desc ]]> limit #{startIndexNo},#{pageSize};
+    </if>
+    <if test="mid != '전체' and conditionOrderStatus == '전체'">
+      select o.*,b.* from dbOrder o join dbBaesong b using(orderIdx) where b.mid = #{mid} <![CDATA[ and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]> limit #{startIndexNo},#{pageSize};
+    </if>
+    <if test="mid != '전체' and conditionOrderStatus != '전체'">
+      select o.*,b.* from dbOrder o join dbBaesong b using(orderIdx) where b.mid = #{mid} <![CDATA[ and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{conditionOrderStatus} order by orderDate desc ]]> limit #{startIndexNo},#{pageSize};
+    </if>
+  </select>
+  
+  <select id="getAdminOrderStatus" resultType="com.spring.javaclassS3.vo.DbBaesongVO">
+    <if test='orderStatus == "전체"'>
+      select a.*,b.* from dbOrder a join dbBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]> limit #{startIndexNo},#{pageSize};
+    </if>
+    <if test='orderStatus != "전체"'>
+      select a.*,b.* from dbOrder a join dbBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{orderStatus} order by orderDate desc ]]> limit #{startIndexNo},#{pageSize};
+    </if>
+  </select>
+  
+  <select id="totRecCntAdminStatus" resultType="int">
+    <if test="orderStatus == '전체'">
+      select count(*) from dbOrder a join dbBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="orderStatus != '전체'">
+      select count(*) from dbOrder a join dbBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{orderStatus} order by orderDate desc ]]>;
+    </if>
+  </select>
+  
+  <select id="totRecCntMyOrderStatus" resultType="int">
+    <if test="mid == '전체' and conditionOrderStatus == '전체'">
+      SELECT count(*) from dbOrder o join dbBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="mid == '전체' and conditionOrderStatus != '전체'">
+      SELECT count(*) from dbOrder o join dbBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{conditionOrderStatus} order by orderDate desc ]]>;
+    </if>
+    <if test="mid != '전체' and conditionOrderStatus == '전체'">
+      SELECT count(*) from dbOrder a join dbBaesong b using(orderIdx) <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="mid != '전체' and conditionOrderStatus != '전체'">
+      SELECT count(*) from dbOrder a join dbBaesong b using(orderIdx) <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{conditionOrderStatus} order by orderDate desc ]]>;
+    </if>
+  </select>
+	
+	<insert id="setCategory1Input">
+		insert into category1 values (#{vo.category1Code}, #{vo.category1Name});
+	</insert>
+	
+	<insert id="setCategory2Input">
+    insert into category2 values (#{vo.category1Code}, #{vo.category2Code}, #{vo.category2Name});
+  </insert>
+	
+	<insert id="setCategory3Input">
+    insert into category3 values (#{vo.category1Code}, #{vo.category2Code}, #{vo.category3Code}, #{vo.category3Name});
+  </insert>
+  
+  <insert id="setProductInput">
+    insert into product value (#{vo.idx},#{vo.category1Code},#{vo.category2Code},#{vo.category3Code},#{vo.productCode},#{vo.productName},#{vo.detail},#{vo.mainPrice},#{vo.fSName},#{vo.content});
+  </insert>
+  
+  <insert id="setOptionInput">
+  	insert into productOption value (default, #{vo.productIdx}, #{vo.optionName}, #{vo.optionPrice});
+  </insert>
+  
+  <insert id="shopCartInput">
+  	insert into dbCart values (default,default,#{vo.mid},#{vo.productIdx},#{vo.productName},#{vo.mainPrice},#{vo.thumbImg},#{vo.optionIdx},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  <insert id="setDbOrder">
+    insert into dbOrder values (default,#{vo.orderIdx},#{vo.mid},#{vo.productIdx},default,#{vo.productName},#{vo.mainPrice},#{vo.thumbImg},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  <insert id="setDbBaesong">
+    insert into dbBaesong values (default,#{baesongVO.oIdx},#{baesongVO.orderIdx},#{baesongVO.orderTotalPrice},#{baesongVO.mid},#{baesongVO.name},#{baesongVO.address},#{baesongVO.tel},#{baesongVO.message},#{baesongVO.payment},#{baesongVO.payMethod},default);
+  </insert>
+  
+  <update id="shopCartUpdate">
+  	update dbCart set optionNum=#{vo.optionNum},totalPrice=totalPrice+#{vo.totalPrice} where productName=#{vo.productName} and optionName=#{vo.optionName};
+  </update>
+  
+  <update id="setMemberPointPlus">
+    update member2 set point = point + #{point} where mid = #{mid};
+  </update>
+	
+	<delete id="setCategory1Delete">
+		delete from category1 where category1Code = #{category1Code};
+	</delete>
+	
+	<delete id="setCategory2Delete">
+		delete from category2 where category2Code = #{category2Code};
+	</delete>
+	
+	<delete id="setCategory3Delete">
+		delete from category3 where category3Code = #{category3Code};
+	</delete>
+	
+	<delete id="dbCartDelete">
+  	delete from dbCart where idx = #{idx};
+  </delete>
+  
+  <delete id="setDbCartDeleteAll">
+    delete from dbCart where idx = #{cartIdx};
+  </delete>
+	
+</mapper>

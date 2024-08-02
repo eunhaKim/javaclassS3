@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC 
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+  
+<tiles-definitions>
+  <!-- 레이아웃을 적용하지 않을경우의 화면 -->
+	<definition name="layoutNo" template="/WEB-INF/views/layout/loginLayout.jsp" />
+	<!-- <definition name="member2/*" extends="layoutNo">
+	  <put-attribute name="body" value="/WEB-INF/views/member2/{1}.jsp" />
+	</definition> -->
+	<definition name="lineTalk/lineTalkList" extends="layoutNo">
+	  <put-attribute name="body" value="/WEB-INF/views/lineTalk/lineTalkList.jsp" />
+	</definition>
+	<definition name="shop/dbOrderBaesong" extends="layoutNo">
+	  <put-attribute name="body" value="/WEB-INF/views/shop/dbOrderBaesong.jsp" />
+	</definition>
+	<!-- <definition name="ai/*" extends="layoutNo">
+	  <put-attribute name="body" value="/WEB-INF/views/ai/{1}.jsp" />
+	</definition> -->
+	
+	<!-- admin레이아웃을 적용하는 화면 -->
+	<definition name="layoutAdmin" template="/WEB-INF/views/layout/adminLayout.jsp">
+		<put-attribute name="header2" value="/WEB-INF/views/layout/header2.jsp" />
+		<put-attribute name="nav2" value="/WEB-INF/views/layout/nav2.jsp" />
+		<put-attribute name="footer2" value="/WEB-INF/views/layout/footer2.jsp" />
+	</definition>
+	<definition name="admin/*" extends="layoutAdmin">
+	  <put-attribute name="body2" value="/WEB-INF/views/admin/{1}.jsp" />
+	</definition>
+	<definition name="admin/*/*" extends="layoutAdmin">
+	  <put-attribute name="body2" value="/WEB-INF/views/admin/{1}/{2}.jsp" />
+	</definition>
+
+  <!-- 나도자연인 레이아웃을 적용하는 화면 -->
+	<definition name="layoutYes" template="/WEB-INF/views/layout/baseLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="nav" value="/WEB-INF/views/layout/nav.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+	<definition name="*" extends="layoutYes">
+	  <put-attribute name="body" value="/WEB-INF/views/{1}.jsp" />
+	</definition>
+	<definition name="*/*" extends="layoutYes">
+	  <put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+	</definition>
+	<definition name="*/*/*" extends="layoutYes">
+	  <put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+	</definition>
+  
+  
+  
+</tiles-definitions>

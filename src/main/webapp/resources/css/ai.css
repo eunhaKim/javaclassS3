@@ -1,0 +1,71 @@
+/* 웹폰트 불러오기 */
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+
+/* 문서 전체의 기본이 되는 body 영역 스타일 적용 */
+
+
+#label-container h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.container1 {
+  background-color: #f6f7fa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 350px;
+  max-width: 650px;
+  min-height: 400px;
+  padding: 20px 0;
+  margin: 0 auto;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+}
+
+.area {
+  background-color: white;
+  width: 60%;
+  min-width: 260px;
+  max-width: 600px;
+  border: 2px dashed steelblue;
+  border-radius: 10px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+#upload-area {
+  cursor: pointer;
+}
+
+#retry-area {
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#upload-area:hover, #retry-area:hover {
+  background-color: aliceblue;
+}
+
+.guide-image {
+  font-size: 120px;
+}
+
+#upload-image {
+  width: 55%;
+  max-width: 540px;
+}
+
+#disqus_thread {
+  background-color: #f6f7fa;
+  max-width: 650px;
+  box-sizing: border-box;
+  padding: 25px;
+  margin: 0 auto;
+  margin-top: 15px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+}
